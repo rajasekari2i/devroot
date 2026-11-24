@@ -2428,8 +2428,8 @@ DEEP[3] = [
    pts:["<b>if / else if / else</b>: choose a path based on a condition.","<b>switch</b>: choose between many fixed options (e.g. payment method).","<b>for</b> loops repeat a known number of times or over every item; <b>while</b> loops repeat until a condition changes.","<b>break</b> exits a loop early; <b>continue</b> skips to the next item.","<b>Early return</b> handles invalid cases first and keeps the main logic unindented and readable."],
    dg:[["Flowchart of the checkout total: a loop over items, then a decision.", {type:"graph", h:300, nodes:[
      {id:"s",x:10,y:30,w:110,h:44,l:"Start",k:"pill"},{id:"a",x:160,y:30,w:130,l:"sum = 0\ni = 0"},{id:"c",x:330,y:16,w:130,h:72,l:"i < items\nlength?",k:"dec acc"},
-     {id:"b",x:330,y:150,w:130,l:"sum += price × qty\ni++"},{id:"d",x:510,y:16,w:120,h:72,l:"sum ≥ 299?",k:"dec acc"},{id:"f",x:660,y:30,w:90,l:"free\ndelivery",k:"ok"},{id:"g",x:510,y:150,w:120,l:"sum += 40"},{id:"e",x:600,y:240,w:150,h:44,l:"Show total",k:"pill"}],
-    edges:[{f:"s",t:"a"},{f:"a",t:"c"},{f:"c",t:"b",l:"yes"},{f:"b",t:"c",d:"M330,172 H300 V88 H360",lx:0},{f:"c",t:"d",l:"no"},{f:"d",t:"f",l:"yes"},{f:"d",t:"g",l:"no"},{f:"g",t:"e",d:"M570,194 V262 H600"},{f:"f",t:"e",d:"M705,74 V240"}]}]] },
+     {id:"b",x:315,y:150,w:160,l:"sum += price × qty\ni++"},{id:"d",x:510,y:16,w:120,h:72,l:"sum ≥ 299?",k:"dec acc"},{id:"f",x:660,y:30,w:90,l:"free\ndelivery",k:"ok"},{id:"g",x:510,y:150,w:120,l:"sum += 40"},{id:"e",x:600,y:240,w:150,h:44,l:"Show total",k:"pill"}],
+    edges:[{f:"s",t:"a"},{f:"a",t:"c"},{f:"c",t:"b",l:"yes"},{f:"b",t:"c",d:"M315,172 H300 V88 H360",lx:0},{f:"c",t:"d",l:"no"},{f:"d",t:"f",l:"yes"},{f:"d",t:"g",l:"no"},{f:"g",t:"e",d:"M570,194 V262 H600"},{f:"f",t:"e",d:"M705,74 V240"}]}]] },
  { more:"Functions let you name a piece of logic, test it on its own and reuse it. Big features are built by composing many small functions.",
    pts:["<b>Parameters</b> are the inputs a function declares; <b>arguments</b> are the actual values you pass.","<b>Return value</b>: the function’s output. A function without one usually has a side effect.","<b>Pure function</b>: same input always gives same output, no side effects. The easiest kind to test.","<b>Side effects</b>: changing outside state, writing to the database, sending an email.","<b>Single responsibility</b>: one function, one job. If you need “and” to describe it, split it.","The <b>call stack</b> tracks which function called which; stack traces show it when errors happen."],
    dg:[["Checkout total built by composing small pure functions.", F([["Input","cart items"],["subtotal(items)","₹240"],["applyCoupon(sub, code)","−₹50 → ₹190"],["deliveryFee(total)","+₹40"],["addTax(total)","+5% GST"],["Output","₹241.50"]],{hl:[0,5]})]] },
@@ -4684,8 +4684,10 @@ nodeSvg = function (n) {
   const ic = plain && n.w >= 130 && n.h >= 38 && !n.noi ? iconFor(n.l, n.s) : null;
   if (!ic) return _nodeI(n);
   const {x, y, w, h} = n, rx = / pill /.test(k) ? h / 2 : (/ stt /.test(k) ? 14 : 8);
+  const LL = wrapT(n.l, (w - 34) / 7.4), SS = n.s ? wrapT(n.s, (w - 34) / 6.3) : "";
+  if (linesOf(LL) * 15 + linesOf(SS) * 14 + 10 > h) return _nodeI(n);   // text would not fit next to an icon
   const tx = x + 26 + (w - 26) / 2;
-  return `<g class="n ${n.k}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" class="nb"/>${iconSvg(ic, x + 9, y + h / 2 - 9, 18)}${mtext(tx, y + h / 2, wrapT(n.l, (w - 34) / 7.4), n.s ? wrapT(n.s, (w - 34) / 6.3) : "")}</g>`;
+  return `<g class="n ${n.k}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" class="nb"/>${iconSvg(ic, x + 9, y + h / 2 - 9, 18)}${mtext(tx, y + h / 2, LL, SS)}</g>`;
 };
 
 /* ===== Shared UML specs ===== */
@@ -4746,8 +4748,8 @@ DEEP[8][5] = {
       {id:"o",x:205,y:95,w:170,l:"o1042 : Order",a:["status = PLACED","totalPaise = 28000"],k:"obj acc"},
       {id:"i1",x:410,y:15,w:160,l:"line1 : OrderItem",a:["qty = 2","pricePaise = 12000"],k:"obj"},
       {id:"i2",x:410,y:175,w:160,l:"line2 : OrderItem",a:["qty = 1","pricePaise = 4000"],k:"obj"},
-      {id:"p1",x:600,y:15,w:150,l:"dosa : Product",a:["name = \"Masala Dosa\""],k:"obj"},
-      {id:"p2",x:600,y:175,w:150,l:"coffee : Product",a:["name = \"Filter Coffee\""],k:"obj"}],
+      {id:"p1",x:595,y:15,w:160,l:"dosa : Product",a:["name = \"Masala Dosa\""],k:"obj"},
+      {id:"p2",x:595,y:175,w:160,l:"coffee : Product",a:["name = \"Filter Coffee\""],k:"obj"}],
      [{f:"c",t:"o",r:"assoc"},{f:"o",t:"i1",r:"assoc"},{f:"o",t:"i2",r:"assoc"},{f:"i1",t:"p1",r:"assoc"},{f:"i2",t:"p2",r:"assoc"}])]},
    {t:"3. Component diagram", d:"<b>What it is:</b> shows the system as replaceable <b>components</b> (deployable modules, services, libraries) and how they connect through <b>interfaces</b>. A circle on a stick (“lollipop”) is an interface a component <b>provides</b>; dashed arrows show which components <b>depend</b> on it. <b>When to use:</b> high-level design, microservices boundaries, explaining which team owns what.",
     dg:["Component diagram: clients depend on the gateway’s REST interface; the gateway depends on three services.", UG(320, [
